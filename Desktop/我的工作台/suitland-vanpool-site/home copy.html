@@ -1,0 +1,916 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Suitland Vanpool - Government Backed Commuter Services</title>
+    <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+    <meta http-equiv="Pragma" content="no-cache">
+    <meta http-equiv="Expires" content="0">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Times New Roman', 'Georgia', serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+            letter-spacing: 0.3px;
+        }
+
+        /* Navigation */
+        .navbar {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: #2563eb;
+        }
+
+        .nav-menu {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+            align-items: center;
+        }
+
+        .nav-menu a {
+            text-decoration: none;
+            color: #6b7280;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            padding: 0.5rem 0;
+        }
+
+        .nav-menu a:hover {
+            color: #2563eb;
+        }
+
+        .language-selector {
+            color: #6b7280;
+            font-weight: 500;
+        }
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 8rem 2rem 4rem;
+            position: relative;
+        }
+
+        .hero-content {
+            max-width: 900px;
+            z-index: 2;
+            margin-bottom: 3rem;
+        }
+
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #1e293b;
+            line-height: 1.1;
+            font-family: 'Times New Roman', serif;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-subtitle {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.5rem;
+            font-size: 1.2rem;
+            color: #10b981;
+            margin-bottom: 2.5rem;
+            font-weight: 500;
+        }
+
+        .hero-subtitle::before {
+            content: '✓';
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            width: 28px;
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            font-weight: bold;
+            flex-shrink: 0;
+        }
+
+        .hero-buttons {
+            display: flex;
+            gap: 1rem;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-bottom: 4rem;
+        }
+
+        .btn-primary, .btn-secondary {
+            padding: 1rem 2rem;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-family: 'Times New Roman', 'Georgia', serif;
+            letter-spacing: 0.5px;
+            min-width: 180px;
+            text-align: center;
+            display: inline-block;
+        }
+
+        .btn-primary {
+            background: #2563eb;
+            color: white;
+            border: 2px solid #2563eb;
+        }
+
+        .btn-secondary {
+            background: transparent;
+            color: #2563eb;
+            border: 2px solid #2563eb;
+        }
+
+        .btn-primary:hover {
+            background: #1d4ed8;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.3);
+            border-color: #1d4ed8;
+        }
+
+        .btn-secondary:hover {
+            background: #2563eb;
+            color: white;
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+        }
+
+        /* Hero Background Image */
+        .hero-image {
+            width: 100%;
+            max-width: 1200px;
+            height: 400px;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
+            position: relative;
+        }
+
+        .hero-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+        }
+
+        /* Certification Badge */
+        .certification {
+            position: absolute;
+            bottom: 2rem;
+            left: 2rem;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 1rem 1.5rem;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .certification::before {
+            content: '✓';
+            background: #10b981;
+            color: white;
+            border-radius: 50%;
+            width: 32px;
+            height: 32px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        .certification-text h4 {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 0.2rem;
+        }
+
+        .certification-text p {
+            font-size: 0.9rem;
+            color: #6b7280;
+        }
+
+        /* How It Works Section */
+        .how-it-works {
+            padding: 6rem 0;
+            background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        }
+
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 3rem;
+            margin-top: 4rem;
+        }
+
+        .step-item {
+            text-align: center;
+            position: relative;
+        }
+
+        .step-number {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            font-weight: bold;
+            margin: 0 auto 2rem;
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        .step-item h3 {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #1e293b;
+        }
+
+        .step-item p {
+            color: #6b7280;
+            line-height: 1.6;
+            max-width: 300px;
+            margin: 0 auto;
+        }
+
+        .step-connector {
+            position: absolute;
+            top: 40px;
+            left: 50%;
+            width: calc(100% - 80px);
+            height: 3px;
+            background: linear-gradient(90deg, #2563eb 0%, #e2e8f0 100%);
+            z-index: 1;
+        }
+
+        .step-item:last-child .step-connector {
+            display: none;
+        }
+
+        @media (max-width: 768px) {
+            .step-connector {
+                display: none;
+            }
+            
+            .steps-container {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+        }
+        .features {
+            padding: 6rem 0;
+            background: white;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+
+        .section-title {
+            text-align: center;
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #1e293b;
+            font-family: 'Times New Roman', 'Georgia', serif;
+            letter-spacing: 0.5px;
+        }
+
+        .section-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: #6b7280;
+            margin-bottom: 4rem;
+            max-width: 600px;
+            margin-left: auto;
+            margin-right: auto;
+            font-family: 'Times New Roman', 'Georgia', serif;
+            letter-spacing: 0.3px;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .feature-card {
+            background: #f8fafc;
+            padding: 2rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid #e2e8f0;
+        }
+
+        .feature-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.08);
+            border-color: #2563eb;
+        }
+
+        .feature-icon {
+            display: none;
+        }
+
+        .feature-card h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 0.8rem;
+            color: #1e293b;
+        }
+
+        .feature-card p {
+            color: #6b7280;
+            line-height: 1.5;
+            font-size: 0.95rem;
+        }
+
+        /* Our Clients Section */
+        .clients {
+            padding: 5rem 0;
+            background: white;
+        }
+
+        .clients-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            align-items: center;
+            margin-top: 3rem;
+        }
+
+        .client-logo {
+            text-align: center;
+            padding: 1.5rem;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            opacity: 0.7;
+        }
+
+        .client-logo:hover {
+            opacity: 1;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+
+        .client-logo-placeholder {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 1rem;
+            color: white;
+            font-weight: bold;
+            font-size: 1.5rem;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2);
+            transition: all 0.3s ease;
+        }
+
+        .client-logo:hover .client-logo-placeholder {
+            transform: scale(1.1);
+            box-shadow: 0 8px 25px rgba(37, 99, 235, 0.3);
+        }
+
+        /* Different colors for each agency - Extended to 8 */
+        .client-logo:nth-child(1) .client-logo-placeholder {
+            background: linear-gradient(135deg, #dc2626 0%, #b91c1c 100%);
+        }
+
+        .client-logo:nth-child(2) .client-logo-placeholder {
+            background: linear-gradient(135deg, #059669 0%, #047857 100%);
+        }
+
+        .client-logo:nth-child(3) .client-logo-placeholder {
+            background: linear-gradient(135deg, #7c3aed 0%, #6d28d9 100%);
+        }
+
+        .client-logo:nth-child(4) .client-logo-placeholder {
+            background: linear-gradient(135deg, #ea580c 0%, #c2410c 100%);
+        }
+
+        .client-logo:nth-child(5) .client-logo-placeholder {
+            background: linear-gradient(135deg, #0891b2 0%, #0e7490 100%);
+        }
+
+        .client-logo:nth-child(6) .client-logo-placeholder {
+            background: linear-gradient(135deg, #be185d 0%, #9d174d 100%);
+        }
+
+        .client-logo:nth-child(7) .client-logo-placeholder {
+            background: linear-gradient(135deg, #0f766e 0%, #0d9488 100%);
+        }
+
+        .client-logo:nth-child(8) .client-logo-placeholder {
+            background: linear-gradient(135deg, #7c2d12 0%, #92400e 100%);
+        }
+
+        .client-name {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: #1e293b;
+            margin-top: 1rem;
+        }
+
+        .client-type {
+            display: none;
+        }
+
+        /* Stats Section - Hidden */
+        .stats {
+            display: none;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 3rem;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: #2563eb;
+        }
+
+        .stat-item p {
+            font-size: 1.1rem;
+            color: #94a3b8;
+        }
+
+        /* Footer */
+        .footer {
+            background: #0f172a;
+            color: white;
+            padding: 4rem 0 2rem;
+        }
+
+        .footer-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 3rem;
+            margin-bottom: 3rem;
+        }
+
+        .footer-section h3 {
+            margin-bottom: 1.5rem;
+            color: #2563eb;
+            font-weight: 600;
+        }
+
+        .footer-section p, .footer-section a {
+            color: #94a3b8;
+            text-decoration: none;
+            margin-bottom: 0.8rem;
+            display: block;
+            transition: color 0.3s ease;
+        }
+
+        .footer-section a:hover {
+            color: #2563eb;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #334155;
+            padding-top: 2rem;
+            text-align: center;
+            color: #64748b;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .nav-menu {
+                display: none;
+            }
+
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+
+            .hero-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .hero-image {
+                height: 250px;
+            }
+
+            .certification {
+                position: static;
+                margin-top: 2rem;
+                align-self: flex-start;
+            }
+
+            .section-title {
+                font-size: 2rem;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 2rem;
+            }
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hero-content > * {
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        .hero-content h1 {
+            animation-delay: 0.1s;
+        }
+
+        .hero-subtitle {
+            animation-delay: 0.2s;
+        }
+
+        .hero-buttons {
+            animation-delay: 0.3s;
+        }
+
+        .hero-image {
+            animation: fadeInUp 0.8s ease 0.4s forwards;
+            opacity: 0;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="logo">Suitland Vanpool</div>
+            <ul class="nav-menu">
+                <li><a href="#features">Features</a></li>
+                <li><a href="#how-it-works">How It Works</a></li>
+                <li><a href="#about">About Us</a></li>
+                <li><a href="#signup">Sign Up</a></li>
+                <li><a href="#forum">Forum</a></li>
+                <li><a href="#faq">FAQ</a></li>
+                <li><a href="#contact">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="hero-content">
+            <h1>Suitland Vanpool | Government-Backed Commuter Services</h1>
+            <div class="hero-subtitle">
+                Safe. Affordable. Government-Supported.
+            </div>
+            <div class="hero-buttons">
+                <a href="#signup" class="btn-primary">Join Now</a>
+                <a href="#routes" class="btn-secondary">Check Location</a>
+            </div>
+        </div>
+        
+        <div class="hero-image">
+            <img src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 400'%3E%3Cdefs%3E%3ClinearGradient id='mountains' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23064e3b'/%3E%3Cstop offset='50%25' style='stop-color:%23065f46'/%3E%3Cstop offset='100%25' style='stop-color:%23047857'/%3E%3C/linearGradient%3E%3ClinearGradient id='sky' x1='0%25' y1='0%25' x2='100%25' y2='100%25'%3E%3Cstop offset='0%25' style='stop-color:%23064e3b'/%3E%3Cstop offset='100%25' style='stop-color:%231e3a8a'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect fill='url(%23sky)' width='1200' height='400'/%3E%3Cpath d='M0,350 L200,320 L400,340 L600,310 L800,330 L1000,300 L1200,320 L1200,400 L0,400 Z' fill='url(%23mountains)' opacity='0.9'/%3E%3Cpath d='M0,380 L300,360 L600,370 L900,350 L1200,360 L1200,400 L0,400 Z' fill='url(%23mountains)' opacity='0.7'/%3E%3Cpath d='M50,300 Q200,250 400,280 T800,260 Q1000,240 1200,260' stroke='%23ffffff' stroke-width='3' fill='none' opacity='0.9'/%3E%3Cpath d='M50,300 Q200,250 400,280 T800,260 Q1000,240 1200,260' stroke='%23fbbf24' stroke-width='8' fill='none' opacity='0.8'/%3E%3Cpath d='M50,300 Q200,250 400,280 T800,260 Q1000,240 1200,260' stroke='%23f59e0b' stroke-width='6' fill='none' opacity='0.6'/%3E%3Cpath d='M50,306 Q200,256 400,286 T800,266 Q1000,246 1200,266' stroke='%23dc2626' stroke-width='4' fill='none' opacity='0.7'/%3E%3Ccircle cx='400' cy='275' r='2' fill='%232563eb'/%3E%3Cpath d='M0,400 L1200,400 L1200,380 Q800,370 600,375 T200,385 Q100,390 0,385 Z' fill='%23052e16' opacity='0.8'/%3E%3C/svg%3E" alt="Winding mountain road with glowing light trails at dusk">
+            
+            <div class="certification">
+                <div class="certification-text">
+                    <h4>Government Approved</h4>
+                    <p>Trusted & Reliable</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section class="how-it-works" id="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works</h2>
+            <p class="section-subtitle">Getting started with Suitland Vanpool is simple and straightforward</p>
+            
+            <div class="steps-container">
+                <div class="step-item">
+                    <div class="step-connector"></div>
+                    <div class="step-number">1</div>
+                    <h3>Find Your Location</h3>
+                    <p>Enter your starting point and destination to discover available vanpool routes in your area and find the best commuting options.</p>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-connector"></div>
+                    <div class="step-number">2</div>
+                    <h3>Sign Up</h3>
+                    <p>Create your account and complete the simple registration process. Provide your commute details and schedule preferences.</p>
+                </div>
+                
+                <div class="step-item">
+                    <div class="step-number">3</div>
+                    <h3>Join a Vanpool</h3>
+                    <p>Connect with other commuters and join an existing vanpool, or help us create a new route for your area.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features" id="features">
+        <div class="container">
+            <h2 class="section-title">Why Choose Our Service</h2>
+            <p class="section-subtitle">Experience safe, reliable, and affordable commuter transportation backed by government support</p>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon">🛡️</div>
+                    <h3>Government Backed</h3>
+                    <p>Our services are officially supported and regulated by government agencies, ensuring safety and reliability for all passengers.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">💰</div>
+                    <h3>Cost Effective</h3>
+                    <p>Save money on gas, parking, and vehicle maintenance with our affordable vanpool options designed for daily commuters.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">🌱</div>
+                    <h3>Eco Friendly</h3>
+                    <p>Reduce your carbon footprint by sharing rides with fellow commuters, contributing to a cleaner environment.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">📱</div>
+                    <h3>Easy Booking</h3>
+                    <p>Simple online booking system with real-time route information and flexible scheduling options.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">👥</div>
+                    <h3>Community Focused</h3>
+                    <p>Connect with neighbors and colleagues while enjoying a comfortable and social commuting experience.</p>
+                </div>
+                <div class="feature-card">
+                    <div class="feature-icon">⏰</div>
+                    <h3>Reliable Schedule</h3>
+                    <p>Punctual service with consistent routes and timing, helping you maintain a predictable daily routine.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Our Clients Section -->
+    <section class="clients">
+        <div class="container">
+            <h2 class="section-title">Our Clients</h2>
+            <p class="section-subtitle">Providing services to major federal agencies and government departments</p>
+            
+            <div class="clients-grid">
+                <div class="client-logo">
+                    <div class="client-logo-placeholder">FDA</div>
+                    <div class="client-name">Food & Drug Administration</div>
+                </div>
+                
+                <div class="client-logo">
+                    <div class="client-logo-placeholder">DOC</div>
+                    <div class="client-name">Department of Commerce</div>
+                </div>
+                
+                <div class="client-logo">
+                    <div class="client-logo-placeholder">USC</div>
+                    <div class="client-name">U.S. Census Bureau</div>
+                </div>
+                
+                <div class="client-logo">
+                    <div class="client-logo-placeholder">BLS</div>
+                    <div class="client-name">Bureau of Labor Statistics</div>
+                </div>
+                
+                <div class="client-logo">
+                    <div class="client-logo-placeholder">NOAA</div>
+                    <div class="client-name">National Ocean & Atmospheric Administration</div>
+                </div>
+                
+                <div class="client-logo">
+                    <div class="client-logo-placeholder">GSA</div>
+                    <div class="client-name">General Services Administration</div>
+                </div>
+                
+                <div class="client-logo">
+                    <div class="client-logo-placeholder">NIH</div>
+                    <div class="client-name">National Institutes of Health</div>
+                </div>
+                
+                <div class="client-logo">
+                    <div class="client-logo-placeholder">EPA</div>
+                    <div class="client-name">Environmental Protection Agency</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Stats Section -->
+    <section class="stats">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3 id="riders">5,000+</h3>
+                    <p>Daily Riders</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="routes">50+</h3>
+                    <p>Active Routes</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="savings">$2M+</h3>
+                    <p>Annual Savings</p>
+                </div>
+                <div class="stat-item">
+                    <h3 id="satisfaction">98%</h3>
+                    <p>Satisfaction Rate</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-section">
+                    <h3>About Suitland Vanpool</h3>
+                    <p>Providing safe, reliable, and affordable commuter transportation services backed by government support since 2010.</p>
+                </div>
+                <div class="footer-section">
+                    <h3>Services</h3>
+                    <a href="#">Daily Commuter Routes</a>
+                    <a href="#">Express Services</a>
+                    <a href="#">Group Transportation</a>
+                    <a href="#">Special Events</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Support</h3>
+                    <a href="#">FAQ</a>
+                    <a href="#">Contact Us</a>
+                    <a href="#">Route Information</a>
+                    <a href="#">Safety Guidelines</a>
+                </div>
+                <div class="footer-section">
+                    <h3>Contact Info</h3>
+                    <p>Email: suitlandvanpool@gmail.com</p>
+                    <p>Phone: 240-441-5590</p>
+                    <p>Location: 14132 Bear Creek Drive</p>
+                    <p>Boyds, Maryland 20841</p>
+                </div>
+            </div>
+            <div class="footer-bottom">
+                <p>&copy; 2025 Suitland Vanpool. All rights reserved. | Government-Approved Transportation Service</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Navigation scroll effect
+        window.addEventListener('scroll', function() {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) {
+                navbar.style.background = 'rgba(255, 255, 255, 0.98)';
+                navbar.style.boxShadow = '0 4px 20px rgba(0, 0, 0, 0.08)';
+            } else {
+                navbar.style.background = 'rgba(255, 255, 255, 0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Smooth scrolling
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Number animation
+        function animateNumbers() {
+            const stats = [
+                { id: 'riders', target: 5000, suffix: '+' },
+                { id: 'routes', target: 50, suffix: '+' },
+                { id: 'satisfaction', target: 98, suffix: '%' }
+            ];
+
+            stats.forEach(stat => {
+                const element = document.getElementById(stat.id);
+                let current = 0;
+                const increment = stat.target / 60;
+                const timer = setInterval(() => {
+                    current += increment;
+                    if (current >= stat.target) {
+                        current = stat.target;
+                        clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(current) + stat.suffix;
+                }, 50);
+            });
+
+            // Special handling for $2M+
+            const savingsElement = document.getElementById('savings');
+            let currentSavings = 0;
+            const savingsTarget = 2;
+            const savingsTimer = setInterval(() => {
+                currentSavings += 0.05;
+                if (currentSavings >= savingsTarget) {
+                    currentSavings = savingsTarget;
+                    clearInterval(savingsTimer);
+                }
+                savingsElement.textContent = '$' + currentSavings.toFixed(1) + 'M+';
+            }, 50);
+        }
+
+        // Intersection Observer
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    animateNumbers();
+                    observer.unobserve(entry.target);
+                }
+            });
+        });
+
+        observer.observe(document.querySelector('.stats'));
+
+        // Feature card interactions
+        document.querySelectorAll('.feature-card').forEach(card => {
+            card.addEventListener('mouseenter', function() {
+                this.style.transform = 'translateY(-5px) scale(1.02)';
+            });
+            
+            card.addEventListener('mouseleave', function() {
+                this.style.transform = 'translateY(0) scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
