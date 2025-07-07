@@ -1,0 +1,39 @@
+<!-- 客户信息表单 -->
+<form id="customerForm">
+    <label>姓名: <input type="text" name="name" required></label><br>
+    <label>邮箱: <input type="email" name="email"></label><br>
+    <label>电话: <input type="text" name="phone" required></label><br>
+    <label>留言内容: <textarea name="message" rows="4"></textarea></label><br>
+    <button type="submit">提交</button>
+  </form>
+  
+  <script type="module">
+    const SUPABASE_URL = 'https://zhiwrzpxuyzzvmwkpfui.supabase.co';
+    const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpoaXdyenB4dXl6enZtd2twZnVpIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTE2NzI1MzIsImV4cCI6MjA2NzI0ODUzMn0.kDNLYnW_F0sXcMDZ346_JECgho8ZspHfa7ck0wcZ0GY';
+  
+    import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js/+esm';
+    const supabase = createClient(SUPABASE_URL, SUPABASE_KEY);
+  
+    document.getElementById('customerForm').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const form = e.target;
+      const formData = new FormData(form);
+  
+      const { data, error } = await supabase.from('customer_form').insert([
+        {
+          name: formData.get('name'),
+          email: formData.get('email'),
+          phone: formData.get('phone'),
+          message: formData.get('message'),
+        },
+      ]);
+  
+      if (error) {
+        alert('提交失败：' + error.message);
+      } else {
+        alert('感谢提交，我们已收到您的信息！');
+        form.reset();
+      }
+    });
+  </script>
+  

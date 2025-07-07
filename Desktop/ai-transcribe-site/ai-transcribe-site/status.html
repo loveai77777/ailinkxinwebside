@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>处理进度 - AI 音频转写与总结</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@3.4.1/dist/tailwind.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50 min-h-screen flex flex-col">
+  <!-- 顶部导航栏 -->
+  <header class="bg-white shadow">
+    <div class="container mx-auto px-4 py-4 flex justify-between items-center">
+      <h1 class="text-2xl font-bold text-gray-800">AI 音频转写与总结</h1>
+      <a href="/index.html" class="text-blue-600 hover:underline">返回首页</a>
+    </div>
+  </header>
+
+  <!-- 主体内容 -->
+  <main class="flex-1 flex flex-col items-center justify-center px-4">
+    <div class="bg-white rounded-lg shadow p-8 w-full max-w-md mt-12 flex flex-col items-center">
+      <h2 class="text-2xl font-semibold mb-4">正在处理您的音频...</h2>
+      <!-- 进度条 -->
+      <div class="w-full bg-gray-200 rounded-full h-4 mb-4">
+        <div id="progressBar" class="bg-blue-600 h-4 rounded-full transition-all" style="width: 0%"></div>
+      </div>
+      <p class="text-gray-600">请稍候，AI 正在转写与总结您的音频内容。</p>
+    </div>
+  </main>
+
+  <!-- 页脚 -->
+  <footer class="bg-white text-gray-400 text-center py-4 mt-12 text-sm">
+    © 2024 AI 音频转写与总结. 保留所有权利。
+  </footer>
+
+  <script>
+    // 模拟进度条和5秒后跳转
+    let progress = 0;
+    const progressBar = document.getElementById('progressBar');
+    const interval = setInterval(() => {
+      progress += 2;
+      if (progress > 100) progress = 100;
+      progressBar.style.width = progress + '%';
+    }, 100);
+    setTimeout(() => {
+      clearInterval(interval);
+      progressBar.style.width = '100%';
+      window.location.href = '/result.html';
+    }, 5000);
+  </script>
+</body>
+</html> 

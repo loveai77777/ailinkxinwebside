@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>数据流 - DataFlow</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+            background: #000;
+            color: white;
+        }
+
+        #backgroundCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: 1;
+        }
+
+        .content {
+            position: relative;
+            z-index: 10;
+        }
+
+        .glass {
+            background: rgba(0, 0, 0, 0.2);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+
+        /* 导航栏 */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            padding: 1rem 2rem;
+        }
+
+        .nav-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.5rem;
+            font-weight: bold;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 2rem;
+            list-style: none;
+        }
+
+        .nav-links a {
+            color: rgba(255, 255, 255, 0.9);
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+
+        .nav-links a:hover {
+            color: white;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-btn {
+            background: none;
+            border: none;
+            color: rgba(255, 255, 255, 0.9);
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            margin-top: 10px;
+            min-width: 200px;
+            padding: 10px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-10px);
+            transition: all 0.3s;
+        }
+
+        .dropdown.active .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateY(0);
+        }
+
+        .dropdown-menu a {
+            display: block;
+            padding: 10px 20px;
+            color: rgba(255, 255, 255, 0.8);
+            text-decoration: none;
+            transition: all 0.3s;
+        }
+
+        .dropdown-menu a:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        /* Hero 区域 */
+        .hero {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 2rem;
+            padding-top: 6rem;
+        }
+
+        .hero-content {
+            max-width: 800px;
+            padding: 3rem;
+        }
+
+        .hero h1 {
+            font-size: clamp(3rem, 8vw, 6rem);
+            font-weight: 300;
+            margin-bottom: 1rem;
+            letter-spacing: 2px;
+        }
+
+        .hero p {
+            font-size: clamp(1.2rem, 3vw, 2rem);
+            margin-bottom: 3rem;
+            opacity: 0.8;
+        }
+
+        .controls {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+            align-items: center;
+        }
+
+        .feeling-input {
+            width: 100%;
+            max-width: 400px;
+            padding: 15px 30px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            text-align: center;
+            outline: none;
+            font-size: 1rem;
+        }
+
+        .feeling-input::placeholder {
+            color: rgba(255, 255, 255, 0.6);
+        }
+
+        .transform-btn {
+            padding: 15px 40px;
+            border-radius: 50px;
+            background: rgba(255, 255, 255, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            color: white;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+
+        .transform-btn:hover:not(:disabled) {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.05);
+        }
+
+        .transform-btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .scroll-indicator {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            animation: bounce 2s infinite;
+        }
+
+        @keyframes bounce {
+            0%, 20%, 53%, 80%, 100% { transform: translateX(-50%) translateY(0); }
+            40%, 43% { transform: translateX(-50%) translateY(-30px); }
+            70% { transform: translateX(-50%) translateY(-15px); }
+            90% { transform: translateX(-50%) translateY(-4px); }
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        .spin { animation: spin 1s linear infinite; }
+
+        /* 移动端 */
+        @media (max-width: 768px) {
+            .nav-links { display: none; }
+            .controls { width: 100%; }
+            .feeling-input { width: 100%; }
+        }
+
+        @media (min-width: 640px) {
+            .controls { 
+                flex-direction: row; 
+                justify-content: center;
+            }
+        }
+    </style>
+</head>
+<body>
+    <canvas id="backgroundCanvas"></canvas>
+    
+    <div class="content">
+        <!-- 导航栏 -->
+        <nav class="navbar glass">
+            <div class="nav-content">
+                <div class="logo">
+                    <svg width="32" height="32" viewBox="0 0 32 32">
+                        <defs>
+                            <linearGradient id="logoGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" stop-color="#667eea" />
+                                <stop offset="50%" stop-color="#764ba2" />
+                                <stop offset="100%" stop-color="#f093fb" />
+                            </linearGradient>
+                        </defs>
+                        <circle cx="8" cy="8" r="3" fill="url(#logoGradient)" opacity="0.8" />
+                        <circle cx="24" cy="8" r="3" fill="url(#logoGradient)" opacity="0.9" />
+                        <circle cx="8" cy="24" r="3" fill="url(#logoGradient)" opacity="0.7" />
+                        <circle cx="24" cy="24" r="3" fill="url(#logoGradient)" opacity="1" />
+                        <circle cx="16" cy="16" r="4" fill="url(#logoGradient)" />
+                        <path d="M8 8 L16 16 L24 8 M8 24 L16 16 L24 24" stroke="url(#logoGradient)" stroke-width="2" fill="none" opacity="0.6" />
+                        <circle cx="16" cy="16" r="4" fill="none" stroke="url(#logoGradient)" stroke-width="1" opacity="0.3">
+                            <animate attributeName="r" values="4;8;4" dur="3s" repeatCount="indefinite" />
+                            <animate attributeName="opacity" values="0.3;0;0.3" dur="3s" repeatCount="indefinite" />
+                        </circle>
+                    </svg>
+                    <span>ailinkxin</span>
+                </div>
+                
+                <ul class="nav-links">
+                    <li><a href="about.html" class="text-white hover:text-blue-400 px-4 py-2 rounded transition font-medium">About Us</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+        <!-- Hero 区域 -->
+        <section class="hero" style="width:100vw;max-width:100vw;display:flex;justify-content:center;align-items:flex-start;height:66vh;min-height:400px;padding-top:40vh;">
+            <div class="hero-content glass" style="width:66vw;height:44vw;max-width:1200px;max-height:66vh;aspect-ratio:16/9;display:flex;flex-direction:column;justify-content:center;align-items:center;background:rgba(255,255,255,0.01);backdrop-filter:blur(24px) saturate(160%);border-radius:2rem;border:2px solid rgba(255,255,255,0.06);box-shadow:0 8px 48px 0 rgba(0,0,0,0.10), 0 1.5px 8px 0 rgba(255,255,255,0.01) inset;margin:0 auto;">
+                <h1 id="quote-text" style="font-size:3.2rem;font-weight:700;line-height:1.15;text-align:center;text-shadow:0 2px 16px rgba(0,0,0,0.18),0 1px 0 #fff;">Your imagination, visualized</h1>
+                <p id="quote-author" style="margin-top:2rem;font-size:1.6rem;opacity:0.8;text-align:center;text-shadow:0 1px 8px rgba(0,0,0,0.18),0 1px 0 #fff;"> </p>
+                <script>
+                    const quotes = [
+                        // 原有名言
+                        { text: "The only way to discover the limits of the possible is to go beyond them into the impossible.", author: "– Arthur C. Clarke" },
+                        { text: "Imagination is more important than knowledge. For knowledge is limited, whereas imagination embraces the entire world.", author: "– Albert Einstein" },
+                        { text: "The unexamined life is not worth living.", author: "– Socrates" },
+                        { text: "Simplicity is the ultimate sophistication.", author: "– Leonardo da Vinci" },
+                        { text: "The best way to predict the future is to invent it.", author: "– Alan Kay" },
+                        { text: "What we know is a drop, what we don't know is an ocean.", author: "– Isaac Newton" },
+                        { text: "To be yourself in a world that is constantly trying to make you something else is the greatest accomplishment.", author: "– Ralph Waldo Emerson" },
+                        { text: "The mind is everything. What you think you become.", author: "– Buddha" },
+                        { text: "Stay hungry, stay foolish.", author: "– Steve Jobs" },
+                        { text: "Not everything that can be counted counts, and not everything that counts can be counted.", author: "– Albert Einstein" },
+                        // About页面精选短句
+                        { text: "Bringing time back to the people who matter most.", author: "– AI Link Xin" },
+                        { text: "AI Link Xin was born from a longing: to give everyone more time with the people and pursuits that truly matter.", author: "– AI Link Xin" },
+                        { text: "We see too many people trapped by endless repetitive work, missing irreplaceable moments that make life meaningful.", author: "– AI Link Xin" },
+                        { text: "We deeply understand this pain, because we've lived it too.", author: "– AI Link Xin" },
+                        { text: "We hope to help everyone break free from burdensome work and reclaim time that belongs to them.", author: "– AI Link Xin" },
+                        { text: "Technology's greatest value is in making life more meaningful.", author: "– AI Link Xin" },
+                        { text: "We don't just connect technology; we connect heart to heart.", author: "– AI Link Xin" },
+                        { text: "Understanding each person's innermost desires and needs with genuine care.", author: "– AI Link Xin" },
+                        { text: "Creating fresh ways of living where work serves life, not the other way around.", author: "– AI Link Xin" },
+                        { text: "This isn't wishful thinking. This is the everyday reality we're working to create.", author: "– AI Link Xin" },
+                        { text: "Technology should give you more time to nurture all precious relationships.", author: "– AI Link Xin" },
+                        { text: "No empty promises, only tools that truly save time.", author: "– AI Link Xin" },
+                        { text: "The Gift of Time — Save 1-3 hours daily to do what truly matters to you.", author: "– AI Link Xin" },
+                        { text: "Freedom of Spirit — Break free from repetitive work and reclaim control over your life.", author: "– AI Link Xin" },
+                        { text: "Moments of Togetherness — More time to share life's beautiful moments with family.", author: "– AI Link Xin" },
+                        { text: "Space for Dreams — When daily tasks are handled, you can focus on your real goals and aspirations.", author: "– AI Link Xin" },
+                        { text: "At AI Link Xin, we're not just developing products—we're weaving a warm dream.", author: "– AI Link Xin" },
+                        { text: "Let's work together to use affection and intimacy to connect more beauty.", author: "– AI Link Xin" },
+                        { text: "Bringing time back to the people who matter most.", author: "– AI Link Xin" }
+                    ];
+                    let quoteIdx = 0;
+                    function showQuote(idx) {
+                        document.getElementById('quote-text').textContent = quotes[idx].text;
+                        document.getElementById('quote-author').textContent = quotes[idx].author;
+                    }
+                    showQuote(0);
+                    setInterval(() => {
+                        quoteIdx = (quoteIdx + 1) % quotes.length;
+                        showQuote(quoteIdx);
+                    }, 5000);
+                </script>
+                
+                <div style="width:100%;display:flex;justify-content:center;align-items:center;margin-top:2.5rem;">
+                  <div style="background:rgba(30,30,30,0.45);border-radius:2rem;padding:1.2rem 2.5rem;font-size:1.3rem;color:#fff;font-weight:500;box-shadow:0 2px 12px rgba(0,0,0,0.10);text-align:center;">
+                    Under construction, stay tuned.
+                  </div>
+                </div>
+            </div>
+        </section>
+        
+        <div class="scroll-indicator">
+            <svg width="24" height="24" fill="none" stroke="rgba(255,255,255,0.6)" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3" />
+            </svg>
+            <div style="font-size:0.9rem;opacity:0.7;margin-top:0.2rem;">Scroll Down</div>
+        </div>
+    </div>
+
+    <script>
+        // 背景动画类
+        class BackgroundAnimation {
+            constructor() {
+                this.canvas = document.getElementById('backgroundCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.time = 0;
+                
+                this.visualParams = {
+                    colors: ['#667eea', '#764ba2', '#f093fb'],
+                    speed: 0.4,
+                    rhythm: 'smooth',
+                    density: 0.3,
+                    shape: 'curves',
+                    energy: 0.6
+                };
+                
+                this.init();
+            }
+            
+            init() {
+                this.resizeCanvas();
+                this.initParticles();
+                this.animate();
+                window.addEventListener('resize', () => this.resizeCanvas());
+            }
+            
+            resizeCanvas() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+                this.initParticles();
+            }
+            
+            initParticles() {
+                const count = Math.floor(this.visualParams.density * 200);
+                this.particles = [];
+                
+                for (let i = 0; i < count; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * this.visualParams.speed * 5,
+                        vy: (Math.random() - 0.5) * this.visualParams.speed * 5,
+                        size: Math.random() * 3 + 1,
+                        angle: Math.random() * Math.PI * 2,
+                        life: Math.random()
+                    });
+                }
+            }
+            
+            animate() {
+                this.time += 0.016 * this.visualParams.speed;
+                
+                this.ctx.fillStyle = 'rgba(0, 0, 0, 0.05)';
+                this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                
+                this.particles.forEach((p, i) => {
+                    // 更新位置
+                    if (this.visualParams.rhythm === 'smooth') {
+                        p.x += p.vx;
+                        p.y += p.vy;
+                    } else if (this.visualParams.rhythm === 'pulsing') {
+                        const pulse = Math.sin(this.time * 2);
+                        p.x += p.vx * (1 + pulse * 0.5);
+                        p.y += p.vy * (1 + pulse * 0.5);
+                    } else {
+                        p.x += p.vx + (Math.random() - 0.5) * this.visualParams.energy * 2;
+                        p.y += p.vy + (Math.random() - 0.5) * this.visualParams.energy * 2;
+                    }
+                    
+                    // 边界检查
+                    if (p.x < 0) p.x = this.canvas.width;
+                    if (p.x > this.canvas.width) p.x = 0;
+                    if (p.y < 0) p.y = this.canvas.height;
+                    if (p.y > this.canvas.height) p.y = 0;
+                    
+                    // 绘制
+                    this.ctx.save();
+                    this.ctx.translate(p.x, p.y);
+                    this.ctx.rotate(p.angle);
+                    
+                    const color = this.visualParams.colors[i % this.visualParams.colors.length];
+                    this.ctx.strokeStyle = color;
+                    this.ctx.lineWidth = 1;
+                    
+                    if (this.visualParams.shape === 'curves') {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(0, 0);
+                        this.ctx.quadraticCurveTo(p.size * 10, p.size * 5 * Math.sin(this.time + i), p.size * 20, 0);
+                        this.ctx.stroke();
+                    } else if (this.visualParams.shape === 'lines') {
+                        this.ctx.beginPath();
+                        this.ctx.moveTo(-p.size * 10, 0);
+                        this.ctx.lineTo(p.size * 10, 0);
+                        this.ctx.stroke();
+                    } else {
+                        this.ctx.beginPath();
+                        this.ctx.arc(0, 0, p.size * 5, 0, Math.PI * 2);
+                        this.ctx.fillStyle = color;
+                        this.ctx.fill();
+                    }
+                    
+                    this.ctx.restore();
+                    
+                    p.angle += 0.01 * this.visualParams.energy;
+                    p.life += 0.01;
+                    if (p.life > 1) {
+                        p.life = 0;
+                        p.x = Math.random() * this.canvas.width;
+                        p.y = Math.random() * this.canvas.height;
+                    }
+                });
+                
+                requestAnimationFrame(() => this.animate());
+            }
+            
+            updateParams(params) {
+                this.visualParams = { ...this.visualParams, ...params };
+                this.initParticles();
+            }
+        }
+        
+        // Emotion presets
+        const emotions = {
+            'happy': { colors: ['#FFD700', '#FFA500', '#FF69B4'], speed: 0.7, rhythm: 'smooth', density: 0.8, shape: 'curves', energy: 0.9 },
+            'sad': { colors: ['#4169E1', '#191970', '#483D8B'], speed: 0.3, rhythm: 'smooth', density: 0.4, shape: 'curves', energy: 0.3 },
+            'angry': { colors: ['#FF0000', '#8B0000', '#FF4500'], speed: 0.9, rhythm: 'erratic', density: 0.9, shape: 'lines', energy: 0.95 },
+            'calm': { colors: ['#98FB98', '#00CED1', '#87CEEB'], speed: 0.3, rhythm: 'smooth', density: 0.5, shape: 'curves', energy: 0.4 },
+            'excited': { colors: ['#FF1493', '#00FF00', '#FFFF00'], speed: 0.8, rhythm: 'pulsing', density: 0.9, shape: 'circles', energy: 0.9 }
+        };
+        
+        // 初始化
+        let animation;
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            animation = new BackgroundAnimation();
+            
+            // 事件监听
+            document.getElementById('transform-btn').addEventListener('click', transform);
+            document.getElementById('feeling-input').addEventListener('keypress', function(e) {
+                if (e.key === 'Enter') transform();
+            });
+        });
+        
+        function transform() {
+            const input = document.getElementById('feeling-input');
+            const btn = document.getElementById('transform-btn');
+            const feeling = input.value.trim();
+            
+            if (!feeling) return;
+            
+            btn.innerHTML = '<span class="spin" style="display:inline-block;width:16px;height:16px;border:2px solid white;border-top:2px solid transparent;border-radius:50%;margin-right:8px;"></span>Creating...';
+            btn.disabled = true;
+            
+            setTimeout(() => {
+                let preset = emotions['calm'];
+                for (const [key, value] of Object.entries(emotions)) {
+                    if (feeling.toLowerCase().includes(key)) {
+                        preset = value;
+                        break;
+                    }
+                }
+                
+                animation.updateParams(preset);
+                
+                btn.innerHTML = 'Generate';
+                btn.disabled = false;
+            }, 1500);
+        }
+        
+        function toggleDropdown() {
+            document.querySelector('.dropdown').classList.toggle('active');
+        }
+        
+        // 点击外部关闭下拉菜单
+        document.addEventListener('click', function(e) {
+            if (!e.target.closest('.dropdown')) {
+                document.querySelector('.dropdown').classList.remove('active');
+            }
+        });
+    </script>
+</body>
+</html>
