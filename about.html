@@ -1,0 +1,758 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About - AI Link Xin</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+
+        .hero-section {
+            background: linear-gradient(135deg, #2d1b69 0%, #11998e 50%, #1a1a1a 100%);
+            color: white;
+            text-align: center;
+            padding: 120px 20px 80px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .hero-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 20% 80%, rgba(120, 119, 198, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 20%, rgba(17, 153, 142, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 40% 40%, rgba(45, 27, 105, 0.3) 0%, transparent 50%);
+            animation: backgroundPulse 8s ease-in-out infinite;
+        }
+
+        .hero-section::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(circle at 10% 20%, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 90% 80%, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 30% 70%, rgba(255, 255, 255, 0.02) 1px, transparent 1px),
+                radial-gradient(circle at 70% 30%, rgba(255, 255, 255, 0.02) 1px, transparent 1px);
+            background-size: 200px 200px, 150px 150px, 300px 300px, 250px 250px;
+            animation: floatingDots 20s linear infinite;
+        }
+
+        @keyframes backgroundPulse {
+            0%, 100% { 
+                opacity: 1;
+                transform: scale(1);
+            }
+            50% { 
+                opacity: 0.8;
+                transform: scale(1.05);
+            }
+        }
+
+        @keyframes floatingDots {
+            0% { 
+                transform: translateY(0px) rotate(0deg);
+            }
+            100% { 
+                transform: translateY(-100px) rotate(360deg);
+            }
+        }
+
+        .floating-particles {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+        }
+
+        .particle {
+            position: absolute;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 50%;
+            animation: float 15s infinite linear;
+        }
+
+        .particle:nth-child(1) { 
+            width: 4px; height: 4px; 
+            left: 10%; 
+            animation-delay: 0s;
+            animation-duration: 15s;
+        }
+        .particle:nth-child(2) { 
+            width: 6px; height: 6px; 
+            left: 20%; 
+            animation-delay: 2s;
+            animation-duration: 18s;
+        }
+        .particle:nth-child(3) { 
+            width: 3px; height: 3px; 
+            left: 30%; 
+            animation-delay: 4s;
+            animation-duration: 12s;
+        }
+        .particle:nth-child(4) { 
+            width: 5px; height: 5px; 
+            left: 40%; 
+            animation-delay: 6s;
+            animation-duration: 20s;
+        }
+        .particle:nth-child(5) { 
+            width: 4px; height: 4px; 
+            left: 50%; 
+            animation-delay: 8s;
+            animation-duration: 16s;
+        }
+        .particle:nth-child(6) { 
+            width: 7px; height: 7px; 
+            left: 60%; 
+            animation-delay: 10s;
+            animation-duration: 14s;
+        }
+        .particle:nth-child(7) { 
+            width: 3px; height: 3px; 
+            left: 70%; 
+            animation-delay: 12s;
+            animation-duration: 22s;
+        }
+        .particle:nth-child(8) { 
+            width: 5px; height: 5px; 
+            left: 80%; 
+            animation-delay: 14s;
+            animation-duration: 17s;
+        }
+        .particle:nth-child(9) { 
+            width: 4px; height: 4px; 
+            left: 90%; 
+            animation-delay: 16s;
+            animation-duration: 19s;
+        }
+
+        @keyframes float {
+            0% {
+                transform: translateY(100vh) rotate(0deg);
+                opacity: 0;
+            }
+            10% {
+                opacity: 1;
+            }
+            90% {
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-100px) rotate(360deg);
+                opacity: 0;
+            }
+        }
+
+        .hero-content {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .hero-title {
+            font-size: 4.5rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .hero-subtitle {
+            font-size: 2rem;
+            font-weight: 300;
+            opacity: 0.95;
+            margin-bottom: 2rem;
+        }
+
+        .hero-tagline {
+            font-size: 1.3rem;
+            font-style: italic;
+            opacity: 0.9;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        .section {
+            padding: 80px 0;
+        }
+
+        .section:nth-child(even) {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b69 100%);
+            color: white;
+        }
+
+        .section:nth-child(even) .section-title {
+            color: white;
+        }
+
+        .section:nth-child(even) .mission-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .section:nth-child(even) .meaning-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section:nth-child(even) .meaning-title {
+            color: white;
+        }
+
+        .section:nth-child(even) .meaning-desc {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .section:nth-child(even) .value-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .section:nth-child(even) .value-title {
+            color: white;
+        }
+
+        .section:nth-child(even) .value-desc {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .section:nth-child(even) .scenario-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-left: 4px solid #11998e;
+        }
+
+        .section:nth-child(even) .scenario-title {
+            color: white;
+        }
+
+        .section:nth-child(even) .scenario-desc {
+            color: rgba(255, 255, 255, 0.8);
+        }
+
+        .section:nth-child(even) .vision-text {
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .section-title {
+            font-size: 3rem;
+            font-weight: 600;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: #1a1a1a;
+        }
+
+        .mission-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 4rem;
+            align-items: center;
+        }
+
+        .mission-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #555;
+        }
+
+        .mission-highlight {
+            background: linear-gradient(135deg, #2d1b69, #11998e);
+            color: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+        }
+
+        .name-meaning {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 3rem;
+            margin-top: 3rem;
+        }
+
+        .meaning-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .meaning-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(45, 27, 105, 0.15);
+        }
+
+        .meaning-letter {
+            font-size: 3rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, #2d1b69, #11998e);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .meaning-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .meaning-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .vision-content {
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .vision-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            color: #555;
+            margin-bottom: 3rem;
+        }
+
+        .vision-scenarios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin-top: 3rem;
+        }
+
+        .scenario-card {
+            background: white;
+            padding: 2rem;
+            border-radius: 12px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            border-left: 4px solid #11998e;
+        }
+
+        .scenario-title {
+            font-weight: 600;
+            font-size: 1.2rem;
+            color: #2c3e50;
+            margin-bottom: 1rem;
+        }
+
+        .scenario-desc {
+            color: #666;
+            font-size: 0.95rem;
+            line-height: 1.6;
+        }
+
+        .values-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 2.5rem;
+        }
+
+        .value-card {
+            background: white;
+            padding: 2.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            text-align: center;
+        }
+
+        .value-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(45, 27, 105, 0.15);
+        }
+
+        .value-icon {
+            font-size: 3rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .value-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: #2c3e50;
+        }
+
+        .value-desc {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .benefits-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+        }
+
+        .benefit-item {
+            background: linear-gradient(135deg, #2d1b69 0%, #11998e 100%);
+            color: white;
+            padding: 2rem;
+            border-radius: 12px;
+            text-align: center;
+        }
+
+        .benefit-icon {
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-title {
+            font-weight: 600;
+            font-size: 1.3rem;
+            margin-bottom: 1rem;
+        }
+
+        .benefit-desc {
+            opacity: 0.95;
+            line-height: 1.6;
+        }
+
+        .cta-section {
+            background: linear-gradient(135deg, #1a1a1a 0%, #2d1b69 50%, #11998e 100%);
+            color: white;
+            text-align: center;
+            padding: 80px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 30% 70%, rgba(45, 27, 105, 0.3) 0%, transparent 50%),
+                        radial-gradient(circle at 70% 30%, rgba(17, 153, 142, 0.3) 0%, transparent 50%);
+            animation: backgroundPulse 10s ease-in-out infinite;
+        }
+
+        .cta-title {
+            font-size: 3rem;
+            font-weight: 600;
+            margin-bottom: 1.5rem;
+        }
+
+        .cta-text {
+            font-size: 1.2rem;
+            line-height: 1.8;
+            max-width: 600px;
+            margin: 0 auto 2rem;
+            opacity: 0.95;
+        }
+
+        .cta-quote {
+            font-style: italic;
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 3rem;
+        }
+
+        .contact-info {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+
+        .contact-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 1.1rem;
+        }
+
+        .contact-item a {
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .contact-item a:hover {
+            opacity: 0.8;
+        }
+
+        @media (max-width: 768px) {
+            .hero-title {
+                font-size: 3rem;
+            }
+            
+            .hero-subtitle {
+                font-size: 1.5rem;
+            }
+            
+            .section-title {
+                font-size: 2.2rem;
+            }
+
+            .cta-title {
+                font-size: 2.2rem;
+            }
+            
+            .mission-grid {
+                grid-template-columns: 1fr;
+                gap: 2rem;
+            }
+            
+            .contact-info {
+                flex-direction: column;
+                align-items: center;
+            }
+        }
+
+        .fade-in {
+            opacity: 0;
+            transform: translateY(30px);
+            animation: fadeInUp 0.8s ease forwards;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in:nth-child(1) { animation-delay: 0.1s; }
+        .fade-in:nth-child(2) { animation-delay: 0.2s; }
+        .fade-in:nth-child(3) { animation-delay: 0.3s; }
+        .fade-in:nth-child(4) { animation-delay: 0.4s; }
+    </style>
+</head>
+<body>
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="floating-particles">
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+            <div class="particle"></div>
+        </div>
+        <div class="hero-content">
+            <h1 class="hero-title">AI Link Xin</h1>
+            <p class="hero-subtitle">Connecting Dreams, Illuminating Futures</p>
+            <p class="hero-tagline">"Bringing time back to the people and pursuits that matter most"</p>
+        </div>
+    </section>
+
+    <!-- Our Story Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Our Story</h2>
+            <div class="mission-grid">
+                <div class="mission-text">
+                    <p>AI Link Xin was born from a profound longing: <strong>to give everyone more time with the people and pursuits that truly matter</strong>.</p>
+                    <br>
+                    <p>In this fast-paced world, we see too many people trapped by endless repetitive work, missing precious moments that make life meaningful. We deeply understand this pain, because we've lived it too.</p>
+                </div>
+                <div class="mission-highlight">
+                    <p>We believe that technology's greatest value isn't in creating flashy features, but in making life more meaningful—allowing precious time to be spent where it matters most.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Name Meaning Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">The Warmth Behind Our Name</h2>
+            <div class="name-meaning">
+                <div class="meaning-card fade-in">
+                    <div class="meaning-letter">AI</div>
+                    <h3 class="meaning-title">Affection & Intimacy</h3>
+                    <p class="meaning-desc">Every feature is infused with care for deep human connections, enabling deeper, more meaningful relationships with all the people and things you treasure.</p>
+                </div>
+                <div class="meaning-card fade-in">
+                    <div class="meaning-letter">Link</div>
+                    <h3 class="meaning-title">Heart to Heart Connection</h3>
+                    <p class="meaning-desc">We connect heart to heart, linking you to precious moments, bridging distances between you and your dreams, strengthening emotional bonds with the world.</p>
+                </div>
+                <div class="meaning-card fade-in">
+                    <div class="meaning-letter">Xin</div>
+                    <h3 class="meaning-title">Heart • Trust • New</h3>
+                    <p class="meaning-desc">Understanding each person's innermost desires, believing everyone deserves more time to love and grow, creating fresh ways of living.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Our Vision</h2>
+            <div class="vision-content">
+                <p class="vision-text">Imagine a world where you have control over your time, where work serves life, not the other way around.</p>
+                <div class="vision-scenarios">
+                    <div class="scenario-card">
+                        <h4 class="scenario-title">Friday Evenings</h4>
+                        <p class="scenario-desc">Finish work on time and choose to dine with friends or enjoy peaceful personal time.</p>
+                    </div>
+                    <div class="scenario-card">
+                        <h4 class="scenario-title">Weekend Mornings</h4>
+                        <p class="scenario-desc">Make breakfast with your children, go for a solo run, or explore new places with friends.</p>
+                    </div>
+                    <div class="scenario-card">
+                        <h4 class="scenario-title">Vacation Time</h4>
+                        <p class="scenario-desc">Focus completely on loved ones, visit friends, pursue hobbies, or enjoy quiet moments with yourself.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Values Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">Our Values</h2>
+            <div class="values-grid">
+                <div class="value-card fade-in">
+                    <div class="value-icon">❤️</div>
+                    <h3 class="value-title">Relationships First</h3>
+                    <p class="value-desc">Technology should give you more time to nurture all precious relationships in your life.</p>
+                </div>
+                <div class="value-card fade-in">
+                    <div class="value-icon">✨</div>
+                    <h3 class="value-title">Simple & Warm</h3>
+                    <p class="value-desc">Leave the complexity to systems, keep life simple and beautiful for what truly matters.</p>
+                </div>
+                <div class="value-card fade-in">
+                    <div class="value-icon">🎯</div>
+                    <h3 class="value-title">Genuine & Useful</h3>
+                    <p class="value-desc">No empty promises, only tools that truly save time and add value to your life.</p>
+                </div>
+                <div class="value-card fade-in">
+                    <div class="value-icon">🌱</div>
+                    <h3 class="value-title">Growing Together</h3>
+                    <p class="value-desc">Walking alongside each user to create richer, more fulfilling ways of living.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- What We Bring Section -->
+    <section class="section">
+        <div class="container">
+            <h2 class="section-title">What We Hope to Bring You</h2>
+            <div class="benefits-grid">
+                <div class="benefit-item">
+                    <div class="benefit-icon">⏰</div>
+                    <h3 class="benefit-title">The Gift of Time</h3>
+                    <p class="benefit-desc">Save 1-3 hours daily to do what truly matters to you</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🕊️</div>
+                    <h3 class="benefit-title">Freedom of Spirit</h3>
+                    <p class="benefit-desc">Break free from repetitive work and reclaim control over your life</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🤝</div>
+                    <h3 class="benefit-title">Deeper Connections</h3>
+                    <p class="benefit-desc">More time to cultivate meaningful relationships with important people</p>
+                </div>
+                <div class="benefit-item">
+                    <div class="benefit-icon">🚀</div>
+                    <h3 class="benefit-title">Personal Growth</h3>
+                    <p class="benefit-desc">Focus on self-development and pursuing your dreams</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2 class="cta-title">To Everyone Who Longs for Authentic Living</h2>
+            <p class="cta-text">
+                Perhaps you too have dreamed of truly achieving work-life balance, having more time for all the people and pursuits you treasure. If these words resonate with you, then you've discovered why we exist.
+            </p>
+            <p class="cta-quote">
+                "At AI Link Xin, we're not just developing products—we're weaving a warm dream: helping everyone have more time to love, to connect, to grow, to dream, and to savor every precious moment life offers."
+            </p>
+            <div class="contact-info">
+                <div class="contact-item">
+                    <span>🌐</span>
+                    <a href="http://www.ailinkxin.com">www.ailinkxin.com</a>
+                </div>
+                <div class="contact-item">
+                    <span>📱</span>
+                    <a href="tel:202-670-5108">202-670-5108</a>
+                </div>
+                <div class="contact-item">
+                    <span>💌</span>
+                    <a href="mailto:hello@ailinkxin.com">hello@ailinkxin.com</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        // Add scroll animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.animationPlayState = 'running';
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.fade-in').forEach(el => {
+            el.style.animationPlayState = 'paused';
+            observer.observe(el);
+        });
+
+        // Smooth scrolling for any internal links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
